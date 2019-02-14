@@ -46,8 +46,8 @@ def cityreader(cities=[]):
 cityreader(cities)
 
 # Print the list of cities (name, lat, lon), 1 record per line.
-# for c in cities:
-#    print(c)
+for c in cities:
+    print(c)
 
 # STRETCH GOAL!
 #
@@ -79,15 +79,56 @@ cityreader(cities)
 # Tucson: (32.1558,-110.8777)
 # Salt Lake City: (40.7774,-111.9301)
 
-# TODO Get latitude and longitude values from the user
+# Get latitude and longitude values from the user
+corner1 = input("Enter lat1,lon1: ").split(',')
+# Ensure that user provided exactly two coordinates
+if(len(corner1) != 2):
+    raise Exception('The coordinates were not in the correct format.')
+# Attempt to convert to floating point numbers
+try:
+    corner1 = [float(item) for item in corner1]
+except ValueError:
+    raise Exception('The coordinates were not in the correct format.')
+
+# Do it again for the second corner
+corner2 = input("Enter lat2,lon2: ").split(',')
+# Ensure that user provided exactly two coordinates
+if(len(corner2) != 2):
+    raise Exception('The coordinates were not in the correct format.')
+try:
+    corner2 = [float(item) for item in corner2]
+# Attempt to convert to floating point numbers
+except ValueError:
+    raise Exception('The coordinates were not in the correct format.')
 
 
 def cityreader_stretch(lat1, lon1, lat2, lon2, cities=[]):
     # within will hold the cities that fall within the specified region
     within = []
 
-    # TODO Ensure that the lat and lon valuse are all floats
-    # Go through each city and check to see if it falls within 
+    # Ensure that the lat and lon valuse are all floats
+    lat1 = float(lat1)
+    lat2 = float(lat2)
+    lon1 = float(lon1)
+    lon2 = float(lon2)
+    lat_low = min(lat1, lat2)
+    lat_high = max(lat1, lat2)
+    lon_low = min(lon1, lon2)
+    lon_high = max(lon1, lon2)
+    # Go through each city and check to see if it falls within
     # the specified coordinates.
+    within = []
+    for city in cities:
+        if(city.lat > lat_high or city.lon > lon_high):
+            continue
+        if(city.lat < lat_low or city.lon < lon_low):
+            continue
+        within.append(city)
 
     return within
+
+print(cityreader_stretch(
+    corner1[0], corner1[1],
+    corner2[0], corner2[1],
+    cities,
+))
